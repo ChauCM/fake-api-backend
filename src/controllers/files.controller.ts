@@ -6,16 +6,19 @@ import {
   Get,
   Param,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { editFileName } from '@utils/file-utils';
+import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 
 @ApiTags('files')
 @Controller('files')
 export class FilesController {
+  @UseGuards(JwtAuthGuard)
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
