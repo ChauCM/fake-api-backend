@@ -11,11 +11,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { Response } from 'express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { editFileName } from '@utils/file-utils';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 
 @ApiTags('files')
+@ApiBearerAuth('JWT-auth')
 @Controller('files')
 export class FilesController {
   @UseGuards(JwtAuthGuard)

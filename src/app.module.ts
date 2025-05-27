@@ -13,6 +13,7 @@ import { AuthController } from './controllers/auth.controller';
 import { CategoriesController } from './controllers/categories.controller';
 import { LocationsController } from './controllers/locations.controller';
 import { FilesController } from './controllers/files.controller';
+import { SwaggerController } from './controllers/swagger.controller';
 
 import { ProductsService } from './services/products.service';
 import { CategoriesService } from './services/categories.service';
@@ -86,6 +87,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     CategoriesController,
     FilesController,
     LocationsController,
+    SwaggerController,
   ],
   providers: [
     SeedService,
@@ -102,4 +104,4 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AuthResolver,
   ],
 })
-export class AppModule {}
+export class AppModule { }
