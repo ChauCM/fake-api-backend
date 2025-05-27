@@ -19,8 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "types": [
       "node",
-      "express",
-      "multer"
+      "express"
     ],
     "paths": {
       "@models/*": [
