@@ -1,0 +1,17 @@
+services:
+- type: web
+  name: fake-store-api
+  env: node
+  buildCommand: npm install && npm run build
+  startCommand: npm run start:prod
+  envVars:
+  - key: NODE_ENV
+    value: production
+  - key: ACCESS_SECRET_KEY
+    sync: false
+  - key: REFRESH_SECRET_KEY
+    sync: false
+  - key: RECOVERY_SECRET_KEY
+    sync: false
+  - key: OPENAI_API_KEY
+    sync: false

@@ -17,20 +17,47 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "types": [
+      "node",
+      "express",
+      "multer"
+    ],
     "paths": {
-      "@models/*": ["./src/models/*"],
-      "@strategies/*": ["./src/strategies/*"],
-      "@services/*": ["./src/services/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@controllers/*": ["./src/controllers/*"],
-      "@dtos/*": ["./src/dtos/*"],
-      "@db/*": ["src/database/*"],
-      "@config/*": ["src/config/*"],
-      "@guards/*": ["src/guards/*"],
-      "@decorators/*": ["src/decorators/*"],
+      "@models/*": [
+        "./src/models/*"
+      ],
+      "@strategies/*": [
+        "./src/strategies/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@controllers/*": [
+        "./src/controllers/*"
+      ],
+      "@dtos/*": [
+        "./src/dtos/*"
+      ],
+      "@db/*": [
+        "src/database/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@guards/*": [
+        "src/guards/*"
+      ],
+      "@decorators/*": [
+        "src/decorators/*"
+      ],
     }
   },
   "ts-node": {
-    "require": ["tsconfig-paths/register"]
+    "require": [
+      "tsconfig-paths/register"
+    ]
   }
 }

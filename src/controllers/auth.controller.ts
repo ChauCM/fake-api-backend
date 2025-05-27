@@ -10,17 +10,22 @@ import { RefreshTokenDto } from '@dtos/auth.dto';
 import { LocalAuthGuard } from '@guards/local-auth.guard';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 
+// Extend Express Request type to include user
+interface RequestWithUser extends Request {
+  user: User | Payload;
+}
+
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Req() req: Request) {
+  login(@Req() req: RequestWithUser) {
     const user = req.user as User;
     return {
       access_token: this.authService.generateAccessToken(user),
@@ -30,7 +35,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  profile(@Req() req: Request) {
+  profile(@Req() req: RequestWithUser) {
     const user = req.user as Payload;
     if (!user?.userId) {
       throw new NotFoundException('User not found');
