@@ -28,7 +28,11 @@ export class AuthService {
   }
 
   generateAccessToken(user: User) {
-    const payload: Payload = { sub: user.id };
+    const payload: Payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role
+    };
     return this.jwtService.sign(payload, {
       expiresIn: '20d',
       secret: this.configService.accessSecretKey,
@@ -36,7 +40,11 @@ export class AuthService {
   }
 
   generateRefreshToken(user: User) {
-    const payload: Payload = { sub: user.id };
+    const payload: Payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role
+    };
     return this.jwtService.sign(payload, {
       expiresIn: '10h',
       secret: this.configService.refreshSecretKey,
@@ -56,6 +64,9 @@ export class AuthService {
         secret: this.configService.refreshSecretKey,
       });
       const user = await this.usersService.findById(payload.sub);
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
       const newAccessToken = this.generateAccessToken(user);
       const newRefreshToken = this.generateRefreshToken(user);
       return {
