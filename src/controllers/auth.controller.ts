@@ -1,14 +1,15 @@
 import { Controller, Post, UseGuards, Req, Get, Body, NotFoundException } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from '@db/entities/user.entity';
 
 import { AuthService } from '@services/auth.service';
 import { UsersService } from '@services/users.service';
 import { Payload } from '@models/payload.model';
-import { RefreshTokenDto, LoginDto } from '@dtos/auth.dto';
+import { RefreshTokenDto, LoginDto, RegisterDto } from '@dtos/auth.dto';
 import { LocalAuthGuard } from '@guards/local-auth.guard';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
+import { Role } from '@models/roles';
 
 // Extend Express Request type to include user
 interface RequestWithUser extends Request {
@@ -23,7 +24,46 @@ export class AuthController {
     private usersService: UsersService,
   ) { }
 
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiBody({ type: RegisterDto })
+  @ApiResponse({
+    status: 201,
+    description: 'User registered successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        email: { type: 'string' },
+        name: { type: 'string' },
+        role: { type: 'string' },
+        avatar: { type: 'string' }
+      }
+    }
+  })
+  @Post('register')
+  async register(@Body() registerDto: RegisterDto) {
+    const user = await this.usersService.create({
+      ...registerDto,
+      avatar: 'https://api.lorem.space/image/avatar?w=150&h=150',
+      role: Role.customer
+    });
+    return user;
+  }
+
   @ApiOperation({ summary: 'Login with email and password' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful',
+    schema: {
+      type: 'object',
+      properties: {
+        access_token: { type: 'string' },
+        refresh_token: { type: 'string' }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Body() loginDto: LoginDto, @Req() req: RequestWithUser) {
