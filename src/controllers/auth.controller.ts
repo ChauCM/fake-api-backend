@@ -1,12 +1,12 @@
 import { Controller, Post, UseGuards, Req, Get, Body, NotFoundException } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from '@db/entities/user.entity';
 
 import { AuthService } from '@services/auth.service';
 import { UsersService } from '@services/users.service';
 import { Payload } from '@models/payload.model';
-import { RefreshTokenDto } from '@dtos/auth.dto';
+import { RefreshTokenDto, LoginDto } from '@dtos/auth.dto';
 import { LocalAuthGuard } from '@guards/local-auth.guard';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 
@@ -23,9 +23,10 @@ export class AuthController {
     private usersService: UsersService,
   ) { }
 
+  @ApiOperation({ summary: 'Login with email and password' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Req() req: RequestWithUser) {
+  login(@Body() loginDto: LoginDto, @Req() req: RequestWithUser) {
     const user = req.user as User;
     return {
       access_token: this.authService.generateAccessToken(user),
