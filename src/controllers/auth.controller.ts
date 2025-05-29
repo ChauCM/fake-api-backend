@@ -1,5 +1,5 @@
 import { Controller, Post, UseGuards, Req, Get, Body, NotFoundException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from '@db/entities/user.entity';
 
@@ -74,14 +74,35 @@ export class AuthController {
     };
   }
 
+  @ApiOperation({ summary: 'Get user profile' })
+  @ApiBearerAuth('JWT-auth')
+  @ApiResponse({
+    status: 200,
+    description: 'User profile retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        email: { type: 'string' },
+        name: { type: 'string' },
+        role: { type: 'string' },
+        avatar: { type: 'string' }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  profile(@Req() req: RequestWithUser) {
-    const user = req.user as Payload;
-    if (!user?.userId) {
+  async profile(@Req() req: RequestWithUser) {
+    const payload = req.user as Payload;
+    if (!payload.userId) {
       throw new NotFoundException('User not found');
     }
-    return this.usersService.findById(user.userId);
+    const user = await this.usersService.findById(payload.userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   @Post('refresh-token')
