@@ -16,18 +16,15 @@ export class AuthService {
   ) { }
 
   async validateUser(email: string, pass: string) {
-    // Create a mock user for testing
-    const mockUser: User = {
-      id: 1,
-      email: email,
-      password: pass,
-      name: 'Test User',
-      role: 'customer',
-      avatar: 'https://api.lorem.space/image/avatar?w=150&h=150',
-      creationAt: new Date(),
-      updatedAt: new Date()
-    };
-    return mockUser;
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    if (user.password !== pass) {
+      throw new UnauthorizedException('Invalid password');
+    }
+    const { password, ...result } = user;
+    return result;
   }
 
   generateAccessToken(user: User) {
