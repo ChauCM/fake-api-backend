@@ -10,10 +10,11 @@ import {
   BadRequestException,
   InternalServerErrorException,
   Inject,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { ApiTags, ApiBearerAuth, ApiConsumes, ApiBody, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { editFileName } from '@utils/file-utils';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
@@ -38,6 +39,24 @@ export class FilesController {
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
+  }
+
+  private getBaseUrl(req: Request): string {
+    // First try to use the configured API_URL
+    if (this.configService.apiUrl && this.configService.apiUrl !== 'http://localhost:3001') {
+      return this.configService.apiUrl;
+    }
+
+    // Fallback to dynamic detection from request
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.headers['x-forwarded-host'] || req.headers.host;
+
+    if (host) {
+      return `${protocol}://${host}`;
+    }
+
+    // Final fallback
+    return 'http://localhost:3001';
   }
 
   @UseGuards(JwtAuthGuard)
@@ -103,16 +122,18 @@ export class FilesController {
       },
     }),
   )
-  uploadFile(@UploadedFile() file: any) {
+  uploadFile(@UploadedFile() file: any, @Req() req: Request) {
     try {
       if (!file) {
         throw new BadRequestException('No file uploaded');
       }
 
+      const baseUrl = this.getBaseUrl(req);
+
       return {
         originalname: file.originalname,
         filename: file.filename,
-        location: `${this.configService.apiUrl}/api/v1/files/${file.filename}`,
+        location: `${baseUrl}/api/v1/files/${file.filename}`,
         size: file.size,
         mimetype: file.mimetype,
       };
