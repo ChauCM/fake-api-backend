@@ -10,7 +10,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 
 import { UsersService } from '@services/users.service';
 import { CreateUserDto, ValidateUserDto, UpdateUserDto } from '@dtos/user.dto';
@@ -33,17 +33,62 @@ export class UsersController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({
+    status: 201,
+    description: 'User created successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        email: { type: 'string' },
+        name: { type: 'string' },
+        role: { type: 'string' },
+        avatar: { type: 'string' }
+      }
+    }
+  })
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
   }
 
   @Post('is-available')
+  @ApiOperation({ summary: 'Check if user email is available' })
+  @ApiBody({ type: ValidateUserDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Email availability checked',
+    schema: {
+      type: 'object',
+      properties: {
+        isAvailable: { type: 'boolean' }
+      }
+    }
+  })
   isAvailable(@Body() dto: ValidateUserDto) {
     return this.usersService.isAvailable(dto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
+  @ApiOperation({ summary: 'Update a user' })
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        email: { type: 'string' },
+        name: { type: 'string' },
+        role: { type: 'string' },
+        avatar: { type: 'string' }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() changes: UpdateUserDto,
@@ -53,6 +98,9 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.delete(id);
   }

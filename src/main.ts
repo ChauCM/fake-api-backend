@@ -2,6 +2,7 @@ import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { TypeORMExceptionFilter } from '@utils/filters/typeorm.filter';
+import { MulterExceptionFilter } from '@utils/filters/multer.filter';
 import { SeedService } from '@services/seed.service';
 import helmet from 'helmet';
 
@@ -37,7 +38,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalFilters(new TypeORMExceptionFilter());
+  app.useGlobalFilters(new TypeORMExceptionFilter(), new MulterExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle('Platzi Fake Store API')

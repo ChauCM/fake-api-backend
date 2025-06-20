@@ -10,7 +10,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 
 import { CategoriesService } from '@services/categories.service';
 import { ProductsService } from '@services/products.service';
@@ -21,6 +21,7 @@ import { FilterCategoriesDto } from '@dtos/category.dto';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 
 @ApiTags('categories')
+@ApiBearerAuth('JWT-auth')
 @Controller('categories')
 export class CategoriesController {
   constructor(
@@ -45,6 +46,22 @@ export class CategoriesController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiOperation({ summary: 'Create a new category' })
+  @ApiBody({ type: CreateCategoryDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Category created successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        name: { type: 'string' },
+        image: { type: 'string' },
+        slug: { type: 'string' }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   create(@Body() category: CreateCategoryDto) {
     return this.categoriesService.create(category);
   }
@@ -59,6 +76,22 @@ export class CategoriesController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
+  @ApiOperation({ summary: 'Update a category' })
+  @ApiBody({ type: UpdateCategoryDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Category updated successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'number' },
+        name: { type: 'string' },
+        image: { type: 'string' },
+        slug: { type: 'string' }
+      }
+    }
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() changes: UpdateCategoryDto,
@@ -68,6 +101,9 @@ export class CategoriesController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a category' })
+  @ApiResponse({ status: 200, description: 'Category deleted successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.delete(id);
   }
