@@ -10,7 +10,7 @@ import { UsersService } from '@services/users.service';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @Inject(config.KEY) configService: ConfigType<typeof config>,
-    private usersService: UsersService
+    private usersService: UsersService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       return {
         userId: payload.sub,
         email: payload.email,
-        role: payload.role
+        role: payload.role,
       };
     } catch (error) {
       throw new UnauthorizedException('Invalid token');

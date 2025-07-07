@@ -38,7 +38,10 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalFilters(new TypeORMExceptionFilter(), new MulterExceptionFilter());
+  app.useGlobalFilters(
+    new TypeORMExceptionFilter(),
+    new MulterExceptionFilter(),
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Platzi Fake Store API')

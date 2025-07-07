@@ -13,7 +13,7 @@ export class IsModeratedConstraint implements ValidatorConstraintInterface {
   constructor() {
     const apiKey = process.env.OPENAI_API_KEY;
     if (apiKey) {
-      this.openai = new OpenAI({apiKey});
+      this.openai = new OpenAI({ apiKey });
     }
   }
 
@@ -38,7 +38,7 @@ export class IsModeratedConstraint implements ValidatorConstraintInterface {
 }
 
 export function IsModerated(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,

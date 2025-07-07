@@ -6,5 +6,5 @@ export default registerAs('config', () => ({
   refreshSecretKey: process.env.REFRESH_SECRET_KEY,
   recoverySecretKey: process.env.RECOVERY_SECRET_KEY,
   env: process.env.NODE_ENV || 'dev',
-  apiUrl: process.env.API_URL || 'http://localhost:3001'
+  apiUrl: process.env.API_URL || 'http://localhost:3001',
 }));

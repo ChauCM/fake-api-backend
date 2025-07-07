@@ -104,4 +104,4 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AuthResolver,
   ],
 })
-export class AppModule { }
+export class AppModule {}

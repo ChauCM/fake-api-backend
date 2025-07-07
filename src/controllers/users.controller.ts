@@ -10,7 +10,13 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 import { UsersService } from '@services/users.service';
 import { CreateUserDto, ValidateUserDto, UpdateUserDto } from '@dtos/user.dto';
@@ -21,7 +27,7 @@ import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 @ApiBearerAuth('JWT-auth')
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService) {}
   @Get()
   getAll(@Query() params: FilterUsersDto) {
     return this.usersService.getAll(params);
@@ -45,9 +51,9 @@ export class UsersController {
         email: { type: 'string' },
         name: { type: 'string' },
         role: { type: 'string' },
-        avatar: { type: 'string' }
-      }
-    }
+        avatar: { type: 'string' },
+      },
+    },
   })
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
@@ -62,9 +68,9 @@ export class UsersController {
     schema: {
       type: 'object',
       properties: {
-        isAvailable: { type: 'boolean' }
-      }
-    }
+        isAvailable: { type: 'boolean' },
+      },
+    },
   })
   isAvailable(@Body() dto: ValidateUserDto) {
     return this.usersService.isAvailable(dto);
@@ -84,9 +90,9 @@ export class UsersController {
         email: { type: 'string' },
         name: { type: 'string' },
         role: { type: 'string' },
-        avatar: { type: 'string' }
-      }
-    }
+        avatar: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   update(

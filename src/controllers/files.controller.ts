@@ -15,7 +15,15 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as multer from 'multer';
 import { Response, Request } from 'express';
-import { ApiTags, ApiBearerAuth, ApiConsumes, ApiBody, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 import { editFileName } from '@utils/file-utils';
 import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 import * as fs from 'fs';
@@ -28,7 +36,7 @@ import config from '@config/config';
 @Controller('files')
 export class FilesController {
   constructor(
-    @Inject(config.KEY) private configService: ConfigType<typeof config>
+    @Inject(config.KEY) private configService: ConfigType<typeof config>,
   ) {
     // Ensure upload directory exists
     this.ensureUploadDirectory();
@@ -43,7 +51,10 @@ export class FilesController {
 
   private getBaseUrl(req: Request): string {
     // First try to use the configured API_URL
-    if (this.configService.apiUrl && this.configService.apiUrl !== 'http://localhost:3001') {
+    if (
+      this.configService.apiUrl &&
+      this.configService.apiUrl !== 'http://localhost:3001'
+    ) {
       return this.configService.apiUrl;
     }
 
@@ -70,7 +81,8 @@ export class FilesController {
         file: {
           type: 'string',
           format: 'binary',
-          description: 'File to upload (max 5MB, supported formats: images, PDF, text, Word documents)',
+          description:
+            'File to upload (max 5MB, supported formats: images, PDF, text, Word documents)',
         },
       },
     },
@@ -85,11 +97,14 @@ export class FilesController {
         filename: { type: 'string' },
         location: { type: 'string' },
         size: { type: 'number' },
-        mimetype: { type: 'string' }
-      }
-    }
+        mimetype: { type: 'string' },
+      },
+    },
   })
-  @ApiResponse({ status: 400, description: 'Bad Request - Invalid file type or no file uploaded' })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request - Invalid file type or no file uploaded',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 413, description: 'File too large' })
   @UseInterceptors(

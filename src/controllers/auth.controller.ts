@@ -1,5 +1,19 @@
-import { Controller, Post, UseGuards, Req, Get, Body, NotFoundException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Req,
+  Get,
+  Body,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 import { User } from '@db/entities/user.entity';
 
@@ -22,7 +36,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-  ) { }
+  ) {}
 
   @ApiOperation({ summary: 'Register a new user' })
   @ApiBody({ type: RegisterDto })
@@ -36,16 +50,16 @@ export class AuthController {
         email: { type: 'string' },
         name: { type: 'string' },
         role: { type: 'string' },
-        avatar: { type: 'string' }
-      }
-    }
+        avatar: { type: 'string' },
+      },
+    },
   })
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const user = await this.usersService.create({
       ...registerDto,
       avatar: 'https://api.lorem.space/image/avatar?w=150&h=150',
-      role: Role.customer
+      role: Role.customer,
     });
     return user;
   }
@@ -59,9 +73,9 @@ export class AuthController {
       type: 'object',
       properties: {
         access_token: { type: 'string' },
-        refresh_token: { type: 'string' }
-      }
-    }
+        refresh_token: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(LocalAuthGuard)
@@ -86,9 +100,9 @@ export class AuthController {
         email: { type: 'string' },
         name: { type: 'string' },
         role: { type: 'string' },
-        avatar: { type: 'string' }
-      }
-    }
+        avatar: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @UseGuards(JwtAuthGuard)
@@ -113,9 +127,9 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        access_token: { type: 'string' }
-      }
-    }
+        access_token: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   @Post('refresh-token')

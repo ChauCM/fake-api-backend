@@ -10,7 +10,14 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiExcludeEndpoint, ApiBearerAuth, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiExcludeEndpoint,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 import { ProductsService } from '@services/products.service';
 import { CreateProductDto } from '@dtos/product.dto';
@@ -22,7 +29,7 @@ import { JwtAuthGuard } from '@guards/jwt-auth.guard';
 @ApiBearerAuth('JWT-auth')
 @Controller('products')
 export class ProductsController {
-  constructor(private productsService: ProductsService) { }
+  constructor(private productsService: ProductsService) {}
 
   @Get()
   getAll(@Query() params: FilterProductsDto) {
@@ -68,11 +75,11 @@ export class ProductsController {
           type: 'object',
           properties: {
             id: { type: 'number' },
-            name: { type: 'string' }
-          }
-        }
-      }
-    }
+            name: { type: 'string' },
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   create(@Body() product: CreateProductDto) {
@@ -98,11 +105,11 @@ export class ProductsController {
           type: 'object',
           properties: {
             id: { type: 'number' },
-            name: { type: 'string' }
-          }
-        }
-      }
-    }
+            name: { type: 'string' },
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   update(

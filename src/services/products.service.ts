@@ -122,13 +122,24 @@ export class ProductsService {
 
   async update(id: Product['id'], changes: UpdateProductDto) {
     const product = await this.findById(id);
-    const images = changes.images.join(',') || product.images;
+    const { categoryId, ...otherChanges } = changes;
+
+    const images = changes.images?.join(',') || product.images;
     const slug = changes?.title ? generateSlug(changes.title) : product.slug;
+
     this.productsRepo.merge(product, {
-      ...changes,
+      ...otherChanges,
       images,
       slug,
     });
+
+    if (categoryId) {
+      const category = await this.categoryRepo.findOneByOrFail({
+        id: categoryId,
+      });
+      product.category = category;
+    }
+
     return this.productsRepo.save(product);
   }
 

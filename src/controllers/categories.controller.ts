@@ -10,7 +10,13 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 import { CategoriesService } from '@services/categories.service';
 import { ProductsService } from '@services/products.service';
@@ -27,7 +33,7 @@ export class CategoriesController {
   constructor(
     private categoriesService: CategoriesService,
     private productsService: ProductsService,
-  ) { }
+  ) {}
 
   @Get()
   getAll(@Query() params: FilterCategoriesDto) {
@@ -57,9 +63,9 @@ export class CategoriesController {
         id: { type: 'number' },
         name: { type: 'string' },
         image: { type: 'string' },
-        slug: { type: 'string' }
-      }
-    }
+        slug: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   create(@Body() category: CreateCategoryDto) {
@@ -87,9 +93,9 @@ export class CategoriesController {
         id: { type: 'number' },
         name: { type: 'string' },
         image: { type: 'string' },
-        slug: { type: 'string' }
-      }
-    }
+        slug: { type: 'string' },
+      },
+    },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   update(

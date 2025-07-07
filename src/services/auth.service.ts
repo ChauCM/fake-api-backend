@@ -13,7 +13,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     @Inject(config.KEY) private configService: ConfigType<typeof config>,
-  ) { }
+  ) {}
 
   async validateUser(email: string, pass: string) {
     const user = await this.usersService.findByEmail(email);
@@ -31,7 +31,7 @@ export class AuthService {
     const payload: Payload = {
       sub: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
     };
     return this.jwtService.sign(payload, {
       expiresIn: '20d',
@@ -43,7 +43,7 @@ export class AuthService {
     const payload: Payload = {
       sub: user.id,
       email: user.email,
-      role: user.role
+      role: user.role,
     };
     return this.jwtService.sign(payload, {
       expiresIn: '10h',
