@@ -93,14 +93,16 @@ export class FilterProductsDto {
   @ApiProperty()
   @IsNumber()
   @IsOptional()
+  @Min(1)
   @Field(() => Int, { nullable: true })
-  limit: number;
+  page: number;
 
   @ApiProperty()
   @IsNumber()
   @IsOptional()
+  @Min(1)
   @Field(() => Int, { nullable: true })
-  offset: number;
+  pageSize: number;
 
   @IsOptional()
   @Field(() => Int, { nullable: true })

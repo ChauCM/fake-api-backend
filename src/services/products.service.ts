@@ -33,9 +33,9 @@ export class ProductsService {
         category: { id: categoryId },
       },
     };
-    if (params?.limit > 0 && params?.offset >= 0) {
-      options.take = params?.limit;
-      options.skip = params?.offset;
+    if (params?.pageSize > 0 && params?.page > 0) {
+      options.take = params?.pageSize;
+      options.skip = (params?.page - 1) * params?.pageSize;
     }
     return this.productsRepo.find(options);
   }
@@ -82,9 +82,9 @@ export class ProductsService {
       };
     }
 
-    if (params?.limit > 0 && params?.offset >= 0) {
-      options.take = params?.limit;
-      options.skip = params?.offset;
+    if (params?.pageSize > 0 && params?.page > 0) {
+      options.take = params?.pageSize;
+      options.skip = (params?.page - 1) * params?.pageSize;
     }
     return this.productsRepo.find(options);
   }
